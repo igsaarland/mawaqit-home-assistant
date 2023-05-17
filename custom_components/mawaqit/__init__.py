@@ -223,6 +223,21 @@ class MawaqitPrayerClient:
         res['Mosque_image']=data["image"]
         res["Jumua"]=data["jumua"];
 
+        #Before Salat
+        res["20 min before Fajr"]=datetime.strptime(day_times[0], '%H:%M')-timedelta(minutes=20);
+        res["20 min before Dhuhr"]=datetime.strptime(day_times[2], '%H:%M')-timedelta(minutes=20);
+        res["20 min before Asr"]=datetime.strptime(day_times[3], '%H:%M')-timedelta(minutes=20);
+        res["20 min before Maghrib"]=datetime.strptime(day_times[4], '%H:%M')-timedelta(minutes=20);
+        res["20 min before Ishaa"]=datetime.strptime(day_times[5], '%H:%M')-timedelta(minutes=20);
+        
+        #After Salat
+        res["20 min after Ishaa"]=datetime.strptime(day_times[5], '%H:%M')+timedelta(minutes=20);
+
+        #Jumua
+        res["20 min before Jumua"]=datetime.strptime(data["jumua"], '%H:%M')-timedelta(minutes=20);
+        res["60 min after Jumua"]=datetime.strptime(data["jumua"], '%H:%M')+timedelta(minutes=60);
+
+
         #Iqama timing
         iqamaCalendar = data["iqamaCalendar"]
         iqama= iqamaCalendar[index_month][str(index_day)]

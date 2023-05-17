@@ -25,6 +25,18 @@ SENSOR_TYPES = {
     "Mosque_url": "",
     "Mosque_image": "",
     "Jumua": "",
+
+    "20 min before Fajr": "",
+    "20 min before Dhuhr": "",
+    "20 min before Asr": "",
+    "20 min before Maghrib": "",
+    "20 min before Ishaa": "",
+
+
+
+    "20 min after Ishaa": "",
+    "20 min before Jumua": "",
+    "60 min after Jumua": "",
 }
 
 
