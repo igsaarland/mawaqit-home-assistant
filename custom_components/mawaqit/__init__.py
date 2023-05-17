@@ -224,18 +224,18 @@ class MawaqitPrayerClient:
         res["Jumua"]=data["jumua"];
 
         #Before Salat
-        res["20 min before Fajr"]=datetime.strptime(day_times[0], '%H:%M')-timedelta(minutes=20);
-        res["20 min before Dhuhr"]=datetime.strptime(day_times[2], '%H:%M')-timedelta(minutes=20);
-        res["20 min before Asr"]=datetime.strptime(day_times[3], '%H:%M')-timedelta(minutes=20);
-        res["20 min before Maghrib"]=datetime.strptime(day_times[4], '%H:%M')-timedelta(minutes=20);
-        res["20 min before Ishaa"]=datetime.strptime(day_times[5], '%H:%M')-timedelta(minutes=20);
+        res["20 min before Fajr"]=(datetime.strptime(day_times[0], '%Y-%m-%d %H:%M:%S')-timedelta(minutes=20)).strftime('%Y-%m-%d %H:%M:%S').split(" ",1)[1].rsplit(':', 1)[0];
+        res["20 min before Dhuhr"]=(datetime.strptime(day_times[2], '%Y-%m-%d %H:%M:%S')-timedelta(minutes=20)).strftime('%Y-%m-%d %H:%M:%S').split(" ",1)[1].rsplit(':', 1)[0];
+        res["20 min before Asr"]=(datetime.strptime(day_times[3], '%Y-%m-%d %H:%M:%S')-timedelta(minutes=20)).strftime('%Y-%m-%d %H:%M:%S').split(" ",1)[1].rsplit(':', 1)[0];
+        res["20 min before Maghrib"]=(datetime.strptime(day_times[4], '%Y-%m-%d %H:%M:%S')-timedelta(minutes=20)).strftime('%Y-%m-%d %H:%M:%S').split(" ",1)[1].rsplit(':', 1)[0];
+        res["20 min before Ishaa"]=(datetime.strptime(day_times[5], '%Y-%m-%d %H:%M:%S')-timedelta(minutes=20)).strftime('%Y-%m-%d %H:%M:%S').split(" ",1)[1].rsplit(':', 1)[0];
         
         #After Salat
-        res["20 min after Ishaa"]=datetime.strptime(day_times[5], '%H:%M')+timedelta(minutes=20);
+        res["20 min after Ishaa"]=(datetime.strptime(day_times[5], '%Y-%m-%d %H:%M:%S')+timedelta(minutes=20)).strftime('%Y-%m-%d %H:%M:%S').split(" ",1)[1].rsplit(':', 1)[0];
 
         #Jumua
-        res["20 min before Jumua"]=datetime.strptime(data["jumua"], '%H:%M')-timedelta(minutes=20);
-        res["60 min after Jumua"]=datetime.strptime(data["jumua"], '%H:%M')+timedelta(minutes=60);
+        res["20 min before Jumua"]=(datetime.strptime(data["jumua"], '%Y-%m-%d %H:%M:%S')-timedelta(minutes=20)).strftime('%Y-%m-%d %H:%M:%S').split(" ",1)[1].rsplit(':', 1)[0];
+        res["60 min after Jumua"]=(datetime.strptime(data["jumua"], '%Y-%m-%d %H:%M:%S')+timedelta(minutes=60)).strftime('%Y-%m-%d %H:%M:%S').split(" ",1)[1].rsplit(':', 1)[0];
 
 
         #Iqama timing
