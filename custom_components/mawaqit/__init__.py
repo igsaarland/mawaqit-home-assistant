@@ -221,6 +221,7 @@ class MawaqitPrayerClient:
         res['Mosque_localisation']=data["localisation"]
         res['Mosque_url']=data["url"]    
         res['Mosque_image']=data["image"]
+        res["Jumua"]=data["jumua"];
 
         #Iqama timing
         iqamaCalendar = data["iqamaCalendar"]

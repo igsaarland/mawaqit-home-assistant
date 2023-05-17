@@ -24,6 +24,7 @@ SENSOR_TYPES = {
     "Mosque_localisation": "",
     "Mosque_url": "",
     "Mosque_image": "",
+    "Jumua": "",
 }
 
 

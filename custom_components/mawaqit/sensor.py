@@ -28,7 +28,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     entities = []
     for sensor_type in SENSOR_TYPES:
-        if sensor_type in ["Fajr", "Shurouq", "Dhuhr", "Asr", "Maghrib", "Isha", "Fajr Iqama", "Shurouq Iqama", "Dhuhr Iqama", "Asr Iqama", "Maghrib Iqama", "Isha Iqama", "Next Salat Name", "Next Salat Time" ]: #add "Next Salat Preparation" to the list in case a sensor is needed 15 min before salat time
+        if sensor_type in ["Fajr", "Shurouq", "Dhuhr", "Asr", "Maghrib", "Isha", "Fajr Iqama", "Shurouq Iqama", "Dhuhr Iqama", "Asr Iqama", "Maghrib Iqama", "Isha Iqama", "Next Salat Name", "Next Salat Time", "Jumua" ]: #add "Next Salat Preparation" to the list in case a sensor is needed 15 min before salat time
             entities.append(MawaqitPrayerTimeSensor(sensor_type, client))
 
 
@@ -77,7 +77,7 @@ class MawaqitPrayerTimeSensor(SensorEntity):
     @property
     def native_value(self):
         """Return the state of the sensor.  .astimezone(dt_util.UTC)"""
-        if self.sensor_type in ["Fajr", "Shurouq", "Dhuhr", "Asr", "Maghrib", "Isha", "Next Salat Time", "Fajr Iqama", "Shurouq Iqama", "Dhuhr Iqama", "Asr Iqama", "Maghrib Iqama", "Isha Iqama", "Next Salat Preparation" ]:
+        if self.sensor_type in ["Fajr", "Shurouq", "Dhuhr", "Asr", "Maghrib", "Isha", "Next Salat Time", "Fajr Iqama", "Shurouq Iqama", "Dhuhr Iqama", "Asr Iqama", "Maghrib Iqama", "Isha Iqama", "Next Salat Preparation", "Jumua" ]:
             return (
                 self.client.prayer_times_info.get(self.sensor_type).astimezone(
                     dt_util.UTC
@@ -96,7 +96,7 @@ class MawaqitPrayerTimeSensor(SensorEntity):
     @property
     def device_class(self):
         """Return the device class."""
-        if self.sensor_type in ["Fajr", "Shurouq", "Dhuhr", "Asr", "Maghrib", "Isha", "Next Salat Time", "Fajr Iqama", "Shurouq Iqama", "Dhuhr Iqama", "Asr Iqama", "Maghrib Iqama", "Isha Iqama", "Next Salat Preparation" ]:
+        if self.sensor_type in ["Fajr", "Shurouq", "Dhuhr", "Asr", "Maghrib", "Isha", "Next Salat Time", "Fajr Iqama", "Shurouq Iqama", "Dhuhr Iqama", "Asr Iqama", "Maghrib Iqama", "Isha Iqama", "Next Salat Preparation", "Jumua" ]:
             return DEVICE_CLASS_TIMESTAMP
         #else:
         #    return str
