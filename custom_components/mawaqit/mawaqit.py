@@ -1,4 +1,3 @@
-
 """ Python wrapper for the mawaqit  API """
 from __future__ import annotations
 import json
@@ -27,6 +26,7 @@ class NotAuthenticatedException(Exception):
 class BadCredentialsException(Exception):
     pass
 
+
 class NoMosqueArround(Exception):
     pass
 
@@ -40,7 +40,7 @@ class MawaqitClient:
         longitude: float,
         mosquee: str,
         username: str,
-        password: str,        
+        password: str,
         token: str,
         session: ClientSession = None,
     ) -> None:
@@ -56,10 +56,8 @@ class MawaqitClient:
         self.latitude = latitude
         self.longitude = longitude
         self.mosquee = mosquee
-        self.token = token      
+        self.token = token
         self.session = session if session else ClientSession()
-
-  
 
     async def __aenter__(self) -> MawaqitClient:
         return self
@@ -76,93 +74,80 @@ class MawaqitClient:
         """Close the session."""
         await self.session.close()
 
-
-
     @backoff.on_exception(
         backoff.expo,
         NotAuthenticatedException,
         max_tries=20,
         on_backoff=relogin,
     )
-
-
-
-
-
     async def apimawaqit(self) -> str:
-        if self.token == '': 
-          auth=aiohttp.BasicAuth(self.username, self.password)
-          async with self.session.get(LOGIN_URL, auth=auth) as response:
-            if response.status != 200:
-                raise NotAuthenticatedException
-            data = await response.text()
+        if self.token == "":
+            auth = aiohttp.BasicAuth(self.username, self.password)
+            async with self.session.get(LOGIN_URL, auth=auth) as response:
+                if response.status != 200:
+                    raise NotAuthenticatedException
+                data = await response.text()
 
-          return json.loads(data)["apiAccessToken"]
+            return json.loads(data)["apiAccessToken"]
         else:
-            return self.token  
-
-
-
+            return self.token
 
     async def all_mosques_neighberhood(self):
-        if self.token == '': 
+        if self.token == "":
             api = await self.apimawaqit()
-        else: api = self.token
-        #api = await self.apimawaqit()
-        if len(str(api))>1:
-            payload = {
-                "lat": self.latitude,
-                "lon": self.longitude
-                }
+        else:
+            api = self.token
+        # api = await self.apimawaqit()
+        if len(str(api)) > 1:
+            payload = {"lat": self.latitude, "lon": self.longitude}
             headers = {
-                'Authorization': api,
-                'Content-Type': 'application/json',
-                }
-            api_url0 = 'https://mawaqit.net/api/2.0/mosque/search'
-    
-            async with self.session.get(api_url0, params=payload, data=None, headers=headers) as response:
+                "Authorization": api,
+                "Content-Type": "application/json",
+            }
+            api_url0 = "https://mawaqit.net/api/2.0/mosque/search"
+
+            async with self.session.get(
+                api_url0, params=payload, data=None, headers=headers
+            ) as response:
                 if response.status != 200:
                     raise NotAuthenticatedException
-                #if len(response.text()) == 0:
+                # if len(response.text()) == 0:
                 #    raise NoMosqueArround
-               
+
                 data = await response.json()
 
-                #if len(data) == 0:
+                # if len(data) == 0:
                 #    raise NoMosqueArround
-            return data #json.loads(data)
+            return data  # json.loads(data)
 
     async def fetch_prayer_times(self) -> dict:
-      if self.mosquee == '': # and len(self.all_mosques_neighberhood())>0: 
-            mosque_id =   await (self.all_mosques_neighberhood())
+        if self.mosquee == "":  # and len(self.all_mosques_neighberhood())>0:
+            mosque_id = await self.all_mosques_neighberhood()
             mosque_id = mosque_id[0]["uuid"]
-      else: 
-          mosque_id= self.mosquee 
+        else:
+            mosque_id = self.mosquee
 
-      if self.token == '': 
-          api_token = await self.apimawaqit()
-      else: api_token = self.token
-      
+        if self.token == "":
+            api_token = await self.apimawaqit()
+        else:
+            api_token = self.token
 
-      headers = {'Content-Type': 'application/json',
-             'Api-Access-Token': format(api_token)}	
-      api_url_base = 'https://mawaqit.net/api/2.0/'
-      api_url = api_url_base + 'mosque/' + mosque_id + '/prayer-times'
+        headers = {
+            "Content-Type": "application/json",
+            "Api-Access-Token": format(api_token),
+        }
+        api_url_base = "https://mawaqit.net/api/2.0/"
+        api_url = api_url_base + "mosque/" + mosque_id + "/prayer-times"
 
-      async with self.session.get(api_url, data=None, headers=headers) as response:
-                if response.status != 200:
-                    raise NotAuthenticatedException
-                data = await response.json()
-      return data
-
-
-
+        async with self.session.get(api_url, data=None, headers=headers) as response:
+            if response.status != 200:
+                raise NotAuthenticatedException
+            data = await response.json()
+        return data
 
     async def login(self) -> None:
         """Log into the mawaqit website."""
         auth = aiohttp.BasicAuth(self.username, self.password)
-        async with await self.session.post(
-            LOGIN_URL, auth = auth
-        ) as response:
+        async with await self.session.post(LOGIN_URL, auth=auth) as response:
             if response.status != 200:
                 raise BadCredentialsException

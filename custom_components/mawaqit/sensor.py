@@ -1,3 +1,18 @@
+"""Platform for sensor integration."""
+from __future__ import annotations
+from datetime import timedelta
+
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
+from homeassistant.const import UnitOfTime
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+
+
 """Platform to retrieve Mawaqit prayer times information for Home Assistant."""
 
 from homeassistant.components.sensor import SensorEntity
@@ -7,17 +22,21 @@ import homeassistant.util.dt as dt_util
 
 from .const import DATA_UPDATED, DOMAIN, PRAYER_TIMES_ICON, SENSOR_TYPES
 
+
+
 import json
 import os
 import logging
 
 _LOGGER = logging.getLogger(__name__)
 
+
 def is_date_parsing(date_str):
     try:
         return bool(date_parser.parse(date_str))
     except ValueError:
         return False
+
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up the Mawaqit prayer times sensor platform."""
@@ -28,19 +47,38 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     entities = []
     for sensor_type in SENSOR_TYPES:
-        if sensor_type in ["Fajr", "Shurouq", "Dhuhr", "Asr", "Maghrib", "Isha", "Fajr Iqama", "Shurouq Iqama", "Dhuhr Iqama", "Asr Iqama", "Maghrib Iqama", "Isha Iqama", "Next Salat Name", "Next Salat Time", "Jumua", "20 min before Fajr", "20 min after Ishaa", "20 min before Jumua", "60 min after Jumua", "20 min before Dhuhr", "20 min before Asr", "20 min before Maghrib", "20 min before Ishaa"]: #add "Next Salat Preparation" to the list in case a sensor is needed 15 min before salat time
+        if sensor_type in [
+            "Fajr",
+            "Shurouq",
+            "Dhuhr",
+            "Asr",
+            "Maghrib",
+            "Isha",
+            "Fajr Iqama",
+            "Shurouq Iqama",
+            "Dhuhr Iqama",
+            "Asr Iqama",
+            "Maghrib Iqama",
+            "Isha Iqama",
+            "Next Salat Name",
+            "Next Salat Time",
+            "Jumua",
+            "20 min before Fajr",
+            "20 min after Ishaa",
+            "20 min before Jumua",
+            "60 min after Jumua",
+            "20 min before Dhuhr",
+            "20 min before Asr",
+            "20 min before Maghrib",
+            "20 min before Ishaa",
+        ]:  # add "Next Salat Preparation" to the list in case a sensor is needed 15 min before salat time
             entities.append(MawaqitPrayerTimeSensor(sensor_type, client))
 
-
     async_add_entities(entities, True)
-    name = 'My Mosque'
+    name = "My Mosque"
     sensor1 = [MyMosqueSensor(name, hass)]
     async_add_entities(sensor1, True)
 
-    
-    
-
-        
 
 class MawaqitPrayerTimeSensor(SensorEntity):
     """Representation of an Mawaqit prayer time sensor."""
@@ -65,29 +103,49 @@ class MawaqitPrayerTimeSensor(SensorEntity):
         """Icon to display in the front end."""
         return PRAYER_TIMES_ICON
 
-   # @property
-   # def state(self):
-   #     """Return the state of the sensor."""
-   #     return (
-   #         self.client.prayer_times_info.get(self.sensor_type)
-   #         .astimezone(dt_util.UTC)
-   #         .isoformat()
-   #     )
+    # @property
+    # def state(self):
+    #     """Return the state of the sensor."""
+    #     return (
+    #         self.client.prayer_times_info.get(self.sensor_type)
+    #         .astimezone(dt_util.UTC)
+    #         .isoformat()
+    #     )
 
     @property
     def native_value(self):
         """Return the state of the sensor.  .astimezone(dt_util.UTC)"""
-        if self.sensor_type in ["Fajr", "Shurouq", "Dhuhr", "Asr", "Maghrib", "Isha", "Next Salat Time", "Fajr Iqama", "Shurouq Iqama", "Dhuhr Iqama", "Asr Iqama", "Maghrib Iqama", "Isha Iqama", "Next Salat Preparation", "Jumua", "20 min before Fajr", "20 min after Ishaa", "20 min before Jumua", "60 min after Jumua", "20 min before Dhuhr", "20 min before Asr", "20 min before Maghrib", "20 min before Ishaa" ]:
-            return (
-                self.client.prayer_times_info.get(self.sensor_type).astimezone(
-                    dt_util.UTC
-                    )
-                    )
+        if self.sensor_type in [
+            "Fajr",
+            "Shurouq",
+            "Dhuhr",
+            "Asr",
+            "Maghrib",
+            "Isha",
+            "Next Salat Time",
+            "Fajr Iqama",
+            "Shurouq Iqama",
+            "Dhuhr Iqama",
+            "Asr Iqama",
+            "Maghrib Iqama",
+            "Isha Iqama",
+            "Next Salat Preparation",
+            "Jumua",
+            "20 min before Fajr",
+            "20 min after Ishaa",
+            "20 min before Jumua",
+            "60 min after Jumua",
+            "20 min before Dhuhr",
+            "20 min before Asr",
+            "20 min before Maghrib",
+            "20 min before Ishaa",
+        ]:
+            return self.client.prayer_times_info.get(self.sensor_type).astimezone(
+                dt_util.UTC
+            )
         else:
-            return (
-                self.client.prayer_times_info.get(self.sensor_type)
-                )
-            
+            return self.client.prayer_times_info.get(self.sensor_type)
+
     @property
     def should_poll(self):
         """Disable polling."""
@@ -96,9 +154,33 @@ class MawaqitPrayerTimeSensor(SensorEntity):
     @property
     def device_class(self):
         """Return the device class."""
-        if self.sensor_type in ["Fajr", "Shurouq", "Dhuhr", "Asr", "Maghrib", "Isha", "Next Salat Time", "Fajr Iqama", "Shurouq Iqama", "Dhuhr Iqama", "Asr Iqama", "Maghrib Iqama", "Isha Iqama", "Next Salat Preparation", "Jumua" , "20 min before Fajr", "20 min after Ishaa", "20 min before Jumua", "60 min after Jumua", "20 min before Dhuhr", "20 min before Asr", "20 min before Maghrib", "20 min before Ishaa" ]:
+        if self.sensor_type in [
+            "Fajr",
+            "Shurouq",
+            "Dhuhr",
+            "Asr",
+            "Maghrib",
+            "Isha",
+            "Next Salat Time",
+            "Fajr Iqama",
+            "Shurouq Iqama",
+            "Dhuhr Iqama",
+            "Asr Iqama",
+            "Maghrib Iqama",
+            "Isha Iqama",
+            "Next Salat Preparation",
+            "Jumua",
+            "20 min before Fajr",
+            "20 min after Ishaa",
+            "20 min before Jumua",
+            "60 min after Jumua",
+            "20 min before Dhuhr",
+            "20 min before Asr",
+            "20 min before Maghrib",
+            "20 min before Ishaa",
+        ]:
             return DEVICE_CLASS_TIMESTAMP
-        #else:
+        # else:
         #    return str
 
     async def async_added_to_hass(self):
@@ -107,9 +189,6 @@ class MawaqitPrayerTimeSensor(SensorEntity):
             async_dispatcher_connect(self.hass, DATA_UPDATED, self.async_write_ha_state)
         )
 
-
-
-         
 
 class MyMosqueSensor(SensorEntity):
     """Representation of a mosque sensor."""
@@ -125,24 +204,19 @@ class MyMosqueSensor(SensorEntity):
         self._latitude = latitude
         self._longitude = longitude
 
-
-
-
-    #@Throttle(TIME_BETWEEN_UPDATES)
+    # @Throttle(TIME_BETWEEN_UPDATES)
     async def async_update(self):
         """Get the latest data from the Mawaqit API."""
         current_dir = os.path.dirname(os.path.realpath(__file__))
-        f = open('{}/data/my_mosquee_NN.txt'.format(current_dir))
+        f = open("{}/data/my_mosquee_NN.txt".format(current_dir))
         data = json.load(f)
         f.close()
-        
-        for (k, v) in data.items():
+
+        for k, v in data.items():
             if str(k) != "uuid" and str(k) != "id" and str(k) != "slug":
                 self._attributes[k] = str(v)
                 print("Key: " + k)
                 print("Value: " + str(v))
-
-
 
     @property
     def name(self):
@@ -152,19 +226,39 @@ class MyMosqueSensor(SensorEntity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self._attributes['name']
+        return self._attributes["name"]
 
     @property
     def icon(self):
         """Return the icon of the sensor."""
-        return 'mdi:mosque'
-
-
+        return "mdi:mosque"
 
     @property
     def extra_state_attributes(self):
         """Return attributes for the sensor."""
         return self._attributes
-        
-        
-        
+
+def setup_platform(
+    hass: HomeAssistant,
+    config: ConfigType,
+    add_entities: AddEntitiesCallback,
+    discovery_info: DiscoveryInfoType | None = None
+) -> None:
+    """Set up the sensor platform."""
+    add_entities([ExampleSensor()])
+
+
+class ExampleSensor(SensorEntity):
+    """Representation of a Sensor."""
+
+    _attr_name = "Fajr Time Test"
+    _attr_native_unit_of_measurement = UnitOfTime.HOUR
+    _attr_device_class = SensorDeviceClass.TIMESTAMP
+    _attr_state_class = SensorStateClass.TIMESTAMP
+
+    def update(self) -> None:
+        """Fetch new state data for the sensor.
+
+        This is the only method that should fetch new data for Home Assistant.
+        """
+        self._attr_native_value = dt_util.now() + timedelta(hours=1)

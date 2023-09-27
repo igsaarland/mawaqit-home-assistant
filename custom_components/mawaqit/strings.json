@@ -11,15 +11,14 @@
           "server": "Server"
         }
       },
-      
+
       "mosques": {
         "title": "Your favourite mosque",
         "data": {
           "mosques": "Multiple mosques are available around you, select one :"
         }
-      },      
-      
-      
+      },
+
       "select_server": {
         "title": "Select your favourite mosque",
         "description": "Multiple mosques available, select one :",
@@ -39,7 +38,6 @@
       "one_instance_allowed": "Only a single instance is necessary.",
       "no_mosque": "Sorry, there's no Mawaqit mosque in your neighborhood"
     }
-
   },
   "options": {
     "step": {

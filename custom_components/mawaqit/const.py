@@ -12,10 +12,10 @@ SENSOR_TYPES = {
     "Maghrib": "Adhan",
     "Isha": "Adhan",
     "next_mawaqit": "time",
-    "Fajr Iqama": "",  
-    "Dhuhr Iqama": "",   
-    "Asr Iqama": "",    
-    "Maghrib Iqama": "",  
+    "Fajr Iqama": "",
+    "Dhuhr Iqama": "",
+    "Asr Iqama": "",
+    "Maghrib Iqama": "",
     "Isha Iqama": "",
     "Next Salat Time": "",
     "Next Salat Name": "",
@@ -36,7 +36,6 @@ SENSOR_TYPES = {
 }
 
 
-        
 CONF_CALC_METHOD = "calculation_method"
 
 CALC_METHODS = ["nearest", "farest"]
@@ -52,4 +51,4 @@ USERNAME = "user"
 PASSWORD = "password"
 
 API = "api"
-CONF_UUID ="uuid"
+CONF_UUID = "uuid"
