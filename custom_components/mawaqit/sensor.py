@@ -1,18 +1,3 @@
-"""Platform for sensor integration."""
-from __future__ import annotations
-from datetime import timedelta
-
-from homeassistant.components.sensor import (
-    SensorDeviceClass,
-    SensorEntity,
-    SensorStateClass,
-)
-from homeassistant.const import UnitOfTime
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-
-
 """Platform to retrieve Mawaqit prayer times information for Home Assistant."""
 
 from homeassistant.components.sensor import SensorEntity
@@ -238,27 +223,3 @@ class MyMosqueSensor(SensorEntity):
         """Return attributes for the sensor."""
         return self._attributes
 
-def setup_platform(
-    hass: HomeAssistant,
-    config: ConfigType,
-    add_entities: AddEntitiesCallback,
-    discovery_info: DiscoveryInfoType | None = None
-) -> None:
-    """Set up the sensor platform."""
-    add_entities([ExampleSensor()])
-
-
-class ExampleSensor(SensorEntity):
-    """Representation of a Sensor."""
-
-    _attr_name = "Fajr Time Test"
-    _attr_native_unit_of_measurement = UnitOfTime.HOUR
-    _attr_device_class = SensorDeviceClass.TIMESTAMP
-    _attr_state_class = SensorStateClass.TIMESTAMP
-
-    def update(self) -> None:
-        """Fetch new state data for the sensor.
-
-        This is the only method that should fetch new data for Home Assistant.
-        """
-        self._attr_native_value = dt_util.now() + timedelta(hours=1)
