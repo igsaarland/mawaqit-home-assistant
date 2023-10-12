@@ -1,3 +1,4 @@
+
 """Platform to retrieve Mawaqit prayer times information for Home Assistant."""
 
 from homeassistant.components.sensor import SensorEntity
